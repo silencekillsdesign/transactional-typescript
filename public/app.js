@@ -1,33 +1,24 @@
-// imports
 import { Invoice } from "./classes/Invoice.js";
-const me = {
-    name: "CJ",
-    age: 38,
-    speak(text) {
-        console.log(text);
-    },
-    spend(amount) {
-        console.log("I spent", amount);
-        return amount;
-    }
-};
-// tests
-const invoiceOne = new Invoice("mario", "website", 250);
-const invoiceTwo = new Invoice("luigi", "app", 900);
-let invoices = [];
-invoices.push(invoiceOne);
-invoices.push(invoiceTwo);
-invoices.forEach((Invoice) => {
-    console.log(Invoice.client, Invoice.amount, Invoice.format);
-});
-// get the data from the fields
+import { Payment } from "./classes/Payment.js";
+import { ListTemplate } from "./classes/ListTemplate.js";
 const form = document.querySelector(".new-item-form");
+console.log(form.children);
 // inputs
 const type = document.querySelector("#type");
 const tofrom = document.querySelector("#tofrom");
 const details = document.querySelector("#details");
 const amount = document.querySelector("#amount");
+// list template instance
+const ul = document.querySelector("ul");
+const list = new ListTemplate(ul);
 form.addEventListener("submit", (e) => {
     e.preventDefault();
-    console.log(type.value, tofrom.value, details.value, amount.valueAsNumber);
+    let doc;
+    if (type.value === "invoice") {
+        doc = new Invoice(tofrom.value, details.value, amount.valueAsNumber);
+    }
+    else {
+        doc = new Payment(tofrom.value, details.value, amount.valueAsNumber);
+    }
+    list.render(doc, type.value, "end");
 });
